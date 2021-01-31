@@ -34,6 +34,36 @@
       type="text"
       placeholder="Rechercher un user"
     >
+    <svg
+      id="sort-users"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      @click="sortLowestUsers"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
+      />
+    </svg>
+    <svg
+      id="sort-users"
+      xmlns="http://www.w3.org/2000/svg"
+      fill="none"
+      viewBox="0 0 24 24"
+      stroke="currentColor"
+      @click="sortHighestUsers"
+    >
+      <path
+        stroke-linecap="round"
+        stroke-linejoin="round"
+        stroke-width="2"
+        d="M3 4h13M3 8h9m-9 4h9m5-4v12m0 0l-4-4m4 4l4-4"
+      />
+    </svg>
     <table
       id="tbl-users"
       class="table table-hover"
@@ -44,24 +74,8 @@
           <th>Nom</th>
           <th>Email</th>
           <th>Tel</th>
-          <th>Genre  </th>
-          <th>
-            Age <svg
-              id="sort-users"
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              @click="sortUsers"
-            >
-              <path
-                stroke-linecap="round"
-                stroke-linejoin="round"
-                stroke-width="2"
-                d="M3 4h13M3 8h9m-9 4h6m4 0l4-4m0 0l4 4m-4-4v12"
-              />
-            </svg>
-          </th>
+          <th>Genre</th>
+          <th> Age</th>
         </tr>
       </thead>
       <tbody
@@ -76,7 +90,7 @@
           <td>{{ user.email }}</td>
           <td>{{ user.phone }}</td>
           <td>{{ user.gender }}</td>
-          <td>{{ user.dob.age }} </td>
+          <td>{{ user.dob.age }}</td>
         </tr>
       </tbody>
     </table>
@@ -88,12 +102,12 @@ import axios from 'axios'
 
 export default {
   name: 'Users',
-  data () {
+  data() {
     return {
       results: [],
       errored: false,
       genderFilter: ['male', 'female'],
-      searchUsers:''
+      searchUsers: ''
     }
   },
   computed: {
@@ -102,7 +116,7 @@ export default {
     },
     searchedUsers() {
       return this.usersFiltered.filter((user) => {
-          return (user.name.first+' '+user.name.last).match(new RegExp(this.searchUsers, 'i'));
+        return (user.name.first + ' ' + user.name.last).match(new RegExp(this.searchUsers, 'i'));
 
       })
     }
@@ -117,12 +131,11 @@ export default {
             this.errored = true
           })
     },
-    sortUsers: function () {
-      console.log("fgbv");
-      return this.usersFiltered.sort((user) => {
-        return user.dob.age.;
-
-      });
+    sortLowestUsers() {
+      this.results.sort((a, b) => a.dob.age > b.dob.age ? 1 : -1);
+    },
+    sortHighestUsers() {
+      this.results.sort((a, b) => a.dob.age < b.dob.age ? 1 : -1);
     }
   },
 }
@@ -155,5 +168,18 @@ a {
 
 .joli {
   margin-right: 10px;
+}
+
+.table {
+  padding-top: 30px;
+}
+
+th {
+  padding: 0px 20px;
+}
+#sort-users {
+  width: 40px;
+  vertical-align: middle;
+  padding: 0 10px;
 }
 </style>
