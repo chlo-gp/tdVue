@@ -125,7 +125,8 @@ export default {
     fetchUsers() {
       axios
           .get('https://randomuser.me/api/?results=20')
-          .then(response => (this.results = response.data.results))
+          .then(response => (this.results.push.apply(this.results, response.data.results)))
+
           .catch(error => {
             console.log(error)
             this.errored = true
@@ -174,7 +175,7 @@ a {
   padding-top: 30px;
 }
 
-th {
+th, td {
   padding: 0px 20px;
 }
 #sort-users {
