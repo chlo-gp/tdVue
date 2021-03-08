@@ -1,17 +1,17 @@
 <template>
-  <Users />
+  <div id="nav">
+    <router-link to="/">
+      Home
+    </router-link> |
+    <router-link to="/users">
+      Users
+    </router-link> |
+    <router-link to="/users/:id">
+      About
+    </router-link>
+  </div>
+  <router-view />
 </template>
-
-<script>
-import Users from "./components/Users";
-
-export default {
-  name: 'App',
-  components: {
-    Users
-  }
-}
-</script>
 
 <style>
 #app {
@@ -20,6 +20,21 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
+}
+
+#nav {
+  padding: 30px 0;
+  position: absolute;
+  top: 0;
+  z-index: 2;
+  width: 100%;}
+
+#nav a {
+  font-weight: bold;
+  color: white;
+}
+
+#nav a.router-link-exact-active {
+  color: #42b983;
 }
 </style>
