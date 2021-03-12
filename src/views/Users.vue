@@ -1,8 +1,23 @@
 <template>
   <h1>VueJS example</h1>
-  <button @click="resetFilters">
-    Réinitialiser
-  </button>
+  <div class="buttons">
+    <button
+      class="button"
+      @click="resetFilters"
+    >
+      Réinitialiser
+    </button>
+    <button
+      class="button"
+      @click="showModal"
+    >
+      Ajouter un utilisateur
+    </button>
+    <modal
+      v-show="isModalVisible"
+      @close="closeModal"
+    />
+  </div>
   <hr>
   <div class="headt">
     <button
@@ -40,8 +55,9 @@
       placeholder="Rechercher un user"
     >
 
-    <label>Trier par âge :
-    </label>
+    <p>
+      Trier par âge :
+    </p>
     <p v-if="sortDirection === ''">
       Par défaut
     </p>
@@ -102,24 +118,28 @@
         <td>{{ user.firstName }} {{ user.lastName }}</td>
         <td>{{ user.email }}</td>
         <td>{{ user.gender }}</td>
-        <td>{{ user.birthDate }}</td>
+        <td>{{ user.age }}</td>
       </tr>
     </tbody>
   </table>
 </template>
 
 <script>
-import axios from 'axios'
+import axios from 'axios';
+import Modal from "@/views/Modal";
+
 
 export default {
   name: 'Users',
+  components: {Modal},
   data() {
     return {
       results: [],
       errored: false,
       genderFilter: (this.$route.query.gender || "male,female").split(','),
       searchUsers: this.$route.query.search || '',
-      sortDirection: this.$route.query.sortDirection || ''
+      sortDirection: this.$route.query.sortDirection || '',
+      isModalVisible: false,
     }
   },
   computed: {
@@ -146,9 +166,6 @@ export default {
     sortDirection() {
       this.updateQuery();
     }
-  },
-  created() {
-    //this.fetchUsers()
   },
   methods: {
     updateQuery() {
@@ -190,6 +207,12 @@ export default {
         this.sortDirection = ''
       }
     },
+    showModal() {
+      this.isModalVisible = true;
+    },
+    closeModal() {
+      this.isModalVisible = false;
+    }
   }
 }
 </script>
@@ -197,7 +220,7 @@ export default {
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 h1 {
-  margin: 20px 0 0;
+  margin: 60px 0 0;
   color: #42b983;
 }
 
@@ -256,6 +279,17 @@ th, td {
 }
 
 .img {
-  width: 90px;
+  width: 100px;
+}
+.buttons {
+  display: flex;
+  justify-content: space-around;
+}
+.button {
+  background: #64dc94;
+  color: white;
+  padding: 6px 15px;
+  border: none;
+  border-radius: 5px;
 }
 </style>

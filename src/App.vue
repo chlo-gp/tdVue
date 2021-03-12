@@ -23,15 +23,16 @@
 }
 
 #nav {
-  padding: 30px 0;
   position: absolute;
+  padding: 30px 0;
   top: 0;
   z-index: 2;
-  width: 100%;}
+  width: 100%;
+}
 
 #nav a {
   font-weight: bold;
-  color: white;
+  color: black;
 }
 
 #nav a.router-link-exact-active {
