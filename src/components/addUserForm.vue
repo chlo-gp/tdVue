@@ -1,7 +1,7 @@
 <template>
   <form
     id="addUser"
-    @submit="createUser"
+    @submit.prevent="createUser"
   >
     <div class="pl-lg-4">
       <div class="row">
@@ -35,22 +35,22 @@
             >
           </div>
         </div>
-        <label class="joli">
-          <input
-              v-model="gender"
-              type="checkbox"
-              value="male"
-          >
-          Homme
-        </label>
-        <label>
-          <input
-              v-model="gender"
-              type="checkbox"
-              value="female"
-          >
-          Femme
-        </label>
+        <label for="gender">Genre :</label>
+
+        <select
+          id="gender"
+          v-model="gender"
+        >
+          <option value="">
+            --Choisissez un genre--
+          </option>
+          <option value="male">
+            Homme
+          </option>
+          <option value="female">
+            Femme
+          </option>
+        </select>
       </div>
       <div class="row">
         <div class="col-lg-12">
@@ -69,31 +69,39 @@
           </div>
         </div>
         <div class="col-lg-6">
-        <label class="form-control-label" for="birthday"
-        >Your birthday</label>
-        <input
+          <label
+            class="form-control-label"
+            for="birthday"
+          >Your birthday</label>
+          <input
             id="birthday"
             v-model="birthDate"
             type="date"
             class="form-control form-control-alternative"
-        >
+          >
         </div>
         <div class="col-lg-6">
-          <label class="form-control-label" for="avatar">Choose a profile picture:</label>
+          <label
+            class="form-control-label"
+            for="avatar"
+          >Choose a profile picture:</label>
 
-          <input type="file"
-                 v-model="avatarUrl"
-                 id="avatar" name="avatar"
-                 accept="image/png, image/jpeg">
+          <input
+            id="avatar"
+            name="avatar"
+            type="file"
+            accept="image/png, image/jpeg"
+            :value="avatarUrl"
+            @change="onFileUpload"
+          >
         </div>
-
       </div>
     </div>
     <br>
     <input
       type="submit"
       class="btn btn-info"
-      value="Modifier le profil"
+      value="Créer un profil"
     >
   </form>
 </template>
@@ -119,20 +127,23 @@ export default {
     }
   },
   methods: {
-    createUser(){
-      axios.post(`http://localhost:1501/users`,{
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        birthDate: this.birthDate,
-        avatarUrl: this.avatarUrl,
-        gender: this.gender
-      })
-      .then(response => this.user = response.data.createdUser)
-          .catch(error => {
-            console.log(error)
-            this.errored = true
-          })
+    onFileUpload (event) {
+      this.avatarUrl = event.target.files[0]
+    },
+    async createUser(){
+      const formData = new FormData()
+      formData.append('avatarUrl', this.avatarUrl, this.avatarUrl.name)
+      formData.append('firstName', this.firstName)
+      formData.append('lastName', this.lastName)
+      formData.append('email', this.email)
+      formData.append('gender', this.gender)
+      formData.append('birthDate', this.birthDate)
+      const res = await axios.post(`http://localhost:1501/users`,formData)
+      this.createdUser = res.data.createdUser;
+      window.location.reload()
+      if (res.status !==200) {
+        alert('ERROR');
+      }
     }
   }
 }

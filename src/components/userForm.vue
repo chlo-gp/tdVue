@@ -1,16 +1,18 @@
 <template>
-  <form @submit="updateUser">
+  <form
+    @submit.prevent="updateUser"
+  >
     <div class="pl-lg-4">
       <div class="row">
         <div class="col-lg-6">
           <div class="form-group focused">
             <label
               class="form-control-label"
-              for="input-first-name"
+              for="firstName"
             >First name</label>
             <input
-              id="input-first-name"
-              :value="user.firstName"
+              id="firstName"
+              v-model="updatedUser.firstName"
               type="text"
               class="form-control form-control-alternative"
               placeholder="First name"
@@ -21,11 +23,11 @@
           <div class="form-group">
             <label
               class="form-control-label"
-              for="input-last-name"
+              for="lastName"
             >Last name</label>
             <input
-              id="input-last-name"
-              :value="user.lastName"
+              id="lastName"
+              :value="updatedUser.lastName"
               type="text"
               class="form-control form-control-alternative"
               placeholder="Last Name"
@@ -38,11 +40,11 @@
           <div class="form-group focused">
             <label
               class="form-control-label"
-              for="input-email"
+              for="email"
             >Email</label>
             <input
-              id="input-email"
-              :value="user.email"
+              id="email"
+              :value="updatedUser.email"
               type="email"
               class="form-control form-control-alternative"
               placeholder="Your email"
@@ -69,28 +71,29 @@ export default {
   },
   data() {
     return {
-      updatedUser: {
-        firstName: '',
-        lastName: '',
-        email: ''
-      },
+      updatedUser: this.user,
     }
   },
   watch: {
-
-  },
-  created() {
-    console.log(this.user)
+    user() {
+      this.updatedUser = {...this.user};
+    }
   },
   methods: {
-  updateUser(){
-    axios.put(`http://localhost:1501/users/${this.user.id}`,this.user,)
-        .then(() => alert("Utilisateur modifié"))
-        .catch(error => {
-          console.log(error)
-          this.errored = true
-        })
-  }
+    async updateUser() {
+      const res = await axios.put(`http://localhost:1501/users/${this.user.id}`, this.updatedUser)
+      console.log(res.data)
+      if (res.data.err) {
+        alert(res.data.err);
+      } else {
+        alert("Utilisateur modifié")
+        window.location.reload()
+            .catch(error => {
+              console.log(error)
+              this.errored = true
+            })
+      }
+    }
   }
 }
 </script>
@@ -112,11 +115,6 @@ export default {
   box-shadow: none;
 }
 
-.form-control::-ms-expand {
-  border: 0;
-  background-color: transparent;
-}
-
 .form-control:focus {
   color: #8898aa;
   border-color: rgba(50, 151, 211, .25);
@@ -130,24 +128,10 @@ export default {
   color: #adb5bd;
 }
 
-.form-control::-ms-input-placeholder {
-  opacity: 1;
-  color: #adb5bd;
-}
-
-.form-control::placeholder {
-  opacity: 1;
-  color: #adb5bd;
-}
-
 .form-control:disabled,
 .form-control[readonly] {
   opacity: 1;
   background-color: #e9ecef;
-}
-
-textarea.form-control {
-  height: auto;
 }
 
 .form-group {
@@ -203,6 +187,7 @@ textarea.form-control {
   text-transform: none;
   will-change: transform;
 }
+
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);
@@ -223,10 +208,6 @@ textarea.form-control {
 }
 
 .form-control:focus::-ms-input-placeholder {
-  color: #adb5bd;
-}
-
-.form-control:focus::placeholder {
   color: #adb5bd;
 }
 

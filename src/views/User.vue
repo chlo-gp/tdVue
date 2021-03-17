@@ -36,16 +36,16 @@
           <div class="card-body">
             <div class="text-center">
               <h3>
-                {{ user.firstName + " " + user.lastName }}<span class="font-weight-light">, {{ user.age }}
-                  <i
-                    v-if="user.gender === 'male'"
-                    class="fas fa-male"
-                  />
-                  <i
-                    v-if="user.gender === 'female'"
-                    class="fas fa-female"
-                  />
-                </span>
+                {{ user.firstName + " " + user.lastName }}
+                <span class="font-weight-light">, {{ user.age + " ans" }}</span> <br>
+                <i
+                  v-if="user.gender === 'male'"
+                  class="fas fa-male"
+                />
+                <i
+                  v-if="user.gender === 'female'"
+                  class="fas fa-female"
+                />
               </h3>
               <hr class="my-4">
             </div>
@@ -90,7 +90,7 @@ export default {
     fetchUser() {
       axios
           .get(`http://localhost:1501/users/${this.$route.params.id}`)
-          .then(response => (this.user= response.data))
+          .then(response => (this.user = response.data))
           .catch(error => {
             console.log(error)
             this.errored = true
@@ -101,7 +101,6 @@ export default {
 </script>
 
 <style>
-
 html {
   font-family: sans-serif;
   line-height: 1.15;
@@ -298,8 +297,9 @@ hr {
   margin-left: -15px;
   flex-wrap: wrap;
 }
+
 .col-lg-3,
-.col-lg-6{
+.col-lg-6 {
   position: relative;
   width: 100%;
   min-height: 1px;
@@ -320,7 +320,7 @@ hr {
   background-clip: border-box;
 }
 
-.card>hr {
+.card > hr {
   margin-right: 0;
   margin-left: 0;
 }
@@ -385,7 +385,8 @@ main {
 }
 
 .bg-gradient-default {
-  background: linear-gradient( 87deg, #82b0ff 0, #9c97ff 100%) !important;}
+  background: linear-gradient(87deg, #82b0ff 0, #9c97ff 100%) !important;
+}
 
 [class*='shadow'] {
   transition: all .15s ease;
@@ -427,6 +428,7 @@ a.text-white:focus {
     padding-left: 39px !important;
   }
 }
+
 .mask {
   position: absolute;
   top: 0;
@@ -441,9 +443,11 @@ p {
   font-weight: 300;
   line-height: 1.7;
 }
+
 .header {
   position: relative;
 }
+
 .display-2 span {
   font-weight: 300;
   display: block;

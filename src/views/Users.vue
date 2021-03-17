@@ -98,6 +98,7 @@
             />
           </button>
         </th>
+        <th />
       </tr>
     </thead>
     <tbody
@@ -119,6 +120,14 @@
         <td>{{ user.email }}</td>
         <td>{{ user.gender }}</td>
         <td>{{ user.age }}</td>
+        <td>
+          <button
+            class="button"
+            @click="deleteUser(user.id)"
+          >
+            Supprimer
+          </button>
+        </td>
       </tr>
     </tbody>
   </table>
@@ -127,7 +136,6 @@
 <script>
 import axios from 'axios';
 import Modal from "@/views/Modal";
-
 
 export default {
   name: 'Users',
@@ -156,6 +164,7 @@ export default {
           });
     }
   },
+
   watch: {
     genderFilter() {
       this.updateQuery();
@@ -167,6 +176,11 @@ export default {
       this.updateQuery();
     }
   },
+
+  created: function(){
+    this.fetchUsers()
+  },
+
   methods: {
     updateQuery() {
       const query = {};
@@ -197,6 +211,16 @@ export default {
             this.errored = true
           })
     },
+    deleteUser (id) {
+      axios
+          .delete(`http://localhost:1501/users/`+id)
+          .then(() => window.location.reload())
+          .then(() => alert("Utilisateur supprimé"))
+          .catch(error => {
+            console.log(error)
+            this.errored = true
+          })
+    },
     changeSort() {
       if (this.sortDirection === '') {
         this.sortDirection = 'asc'
@@ -212,7 +236,7 @@ export default {
     },
     closeModal() {
       this.isModalVisible = false;
-    }
+    },
   }
 }
 </script>
@@ -281,10 +305,12 @@ th, td {
 .img {
   width: 100px;
 }
+
 .buttons {
   display: flex;
   justify-content: space-around;
 }
+
 .button {
   background: #64dc94;
   color: white;
