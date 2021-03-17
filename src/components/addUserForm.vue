@@ -88,7 +88,7 @@
 
           <input
             id="avatar"
-            name="avatar"
+            required
             type="file"
             accept="image/png, image/jpeg"
             :value="avatarUrl"
