@@ -303,7 +303,8 @@ th, td {
 }
 
 .img {
-  width: 100px;
+  max-width: 140px;
+  max-height: 140px;
 }
 
 .buttons {
