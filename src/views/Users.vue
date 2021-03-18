@@ -160,7 +160,7 @@ export default {
           .sort((a, b) => {
             if (!this.sortDirection) return 0;
             const modifier = this.sortDirection === 'desc' ? -1 : 1;
-            return (a.birthDate - b.birthDate) * modifier;
+            return (a.age - b.age) * modifier;
           });
     }
   },
@@ -304,7 +304,7 @@ th, td {
 
 .img {
   max-width: 140px;
-  max-height: 140px;
+  max-height: 110px;
 }
 
 .buttons {
