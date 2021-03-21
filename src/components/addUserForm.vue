@@ -117,20 +117,21 @@ export default {
   data() {
     return {
       createdUser: {
-        firstName:'',
+        firstName: '',
         lastName: '',
         email: '',
         birthDate: '',
         avatarUrl: '',
-        gender:''
+        gender: ''
       },
     }
   },
   methods: {
-    onFileUpload (event) {
+    onFileUpload(event) {
       this.avatarUrl = event.target.files[0]
     },
-    async createUser(){
+    async createUser() {
+
       const formData = new FormData()
       formData.append('avatarUrl', this.avatarUrl, this.avatarUrl.name)
       formData.append('firstName', this.firstName)
@@ -138,12 +139,20 @@ export default {
       formData.append('email', this.email)
       formData.append('gender', this.gender)
       formData.append('birthDate', this.birthDate)
-      const res = await axios.post(`http://localhost:1501/users`,formData)
-      this.createdUser = res.data.createdUser;
-      window.location.reload()
-      if (res.status !==200) {
-        alert('ERROR');
-      }
+
+      const res = await axios.post(`http://localhost:1501/users`, formData)
+          .then(response => {
+            console.log(response)
+            this.createdUser = res.data.createdUser
+            window.location.reload()
+          })
+          .catch(error => {
+            console.log(error)
+            if (error.response.status === 403) {
+              alert("Cet email est déjà utilisé, veuillez en saisir un autre")
+            }
+            this.errored = true
+          })
     }
   }
 }
@@ -257,6 +266,7 @@ textarea.form-control {
   text-transform: none;
   will-change: transform;
 }
+
 .btn:hover {
   transform: translateY(-2px);
   box-shadow: 0 7px 14px rgba(50, 50, 93, .1), 0 3px 6px rgba(0, 0, 0, .08);

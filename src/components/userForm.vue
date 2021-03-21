@@ -27,7 +27,7 @@
             >Last name</label>
             <input
               id="lastName"
-              :value="updatedUser.lastName"
+              v-model="updatedUser.lastName"
               type="text"
               class="form-control form-control-alternative"
               placeholder="Last Name"
@@ -44,7 +44,7 @@
             >Email</label>
             <input
               id="email"
-              :value="updatedUser.email"
+              v-model="updatedUser.email"
               type="email"
               class="form-control form-control-alternative"
               placeholder="Your email"
@@ -80,19 +80,21 @@ export default {
     }
   },
   methods: {
-    async updateUser() {
-      const res = await axios.put(`http://localhost:1501/users/${this.user.id}`, this.updatedUser)
-      console.log(res.data)
-      if (res.data.err) {
-        alert(res.data.err);
-      } else {
-        alert("Utilisateur modifié")
-        window.location.reload()
-            .catch(error => {
-              console.log(error)
-              this.errored = true
-            })
-      }
+    updateUser() {
+      axios.put(`http://localhost:1501/users/${this.user.id}`, this.updatedUser)
+          .then(response => {
+            //window.location.reload()
+            console.log(response.data)
+            alert("Utilisateur modifié")
+          })
+          .catch(err => {
+            console.log(err)
+            if (err.response.status === 403) {
+              alert("Cet email est déjà utilisé, veuillez en saisir un autre")
+            }
+            this.errored = true
+          })
+
     }
   }
 }
